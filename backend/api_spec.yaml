@@ -1,0 +1,421 @@
+openapi: 3.1.0
+info:
+  title: WeWork API
+  description: Sistema de cadastro de profissionais
+  version: 1.0.0
+paths:
+  /health:
+    get:
+      tags:
+      - health
+      summary: Healthcheck
+      operationId: healthcheck_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+                title: Response Healthcheck Health Get
+  /professionals:
+    post:
+      tags:
+      - professionals
+      summary: Criar profissional
+      operationId: create_professional_professionals_post
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfessionalInput'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfessionalOutput'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - professionals
+      summary: Listar profissionais com filtros
+      operationId: list_professionals_professionals_get
+      parameters:
+      - name: nome
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          description: Filtro parcial por nome
+          title: Nome
+        description: Filtro parcial por nome
+      - name: cargo
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cargo
+      - name: departamento
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Departamento
+      - name: data_inicio_de
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Data Inicio De
+      - name: data_inicio_ate
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Data Inicio Ate
+      - name: vencendo_em_dias
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 365
+            minimum: 0
+          - type: 'null'
+          title: Vencendo Em Dias
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProfessionalOutput'
+                title: Response List Professionals Professionals Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /professionals/{professional_id}:
+    get:
+      tags:
+      - professionals
+      summary: Buscar por id
+      operationId: get_professional_professionals__professional_id__get
+      parameters:
+      - name: professional_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Professional Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfessionalOutput'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - professionals
+      summary: Atualizar
+      operationId: update_professional_professionals__professional_id__put
+      parameters:
+      - name: professional_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Professional Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfessionalInput'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfessionalOutput'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - professionals
+      summary: Excluir
+      operationId: delete_professional_professionals__professional_id__delete
+      parameters:
+      - name: professional_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Professional Id
+      responses:
+        '204':
+          description: Successful Response
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /professionals/export/csv:
+    get:
+      tags:
+      - professionals
+      summary: Exportar listagem em CSV
+      operationId: export_professionals_csv_professionals_export_csv_get
+      parameters:
+      - name: nome
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nome
+      - name: cargo
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cargo
+      - name: departamento
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Departamento
+      - name: data_inicio_de
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Data Inicio De
+      - name: data_inicio_ate
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Data Inicio Ate
+      - name: vencendo_em_dias
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+            maximum: 365
+            minimum: 0
+          - type: 'null'
+          title: Vencendo Em Dias
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ProfessionalInput:
+      properties:
+        nome:
+          type: string
+          maxLength: 120
+          minLength: 2
+          title: Nome
+        email:
+          type: string
+          format: email
+          title: Email
+        cargo:
+          type: string
+          maxLength: 80
+          minLength: 2
+          title: Cargo
+        departamento:
+          type: string
+          maxLength: 80
+          minLength: 2
+          title: Departamento
+        data_inicio:
+          type: string
+          format: date
+          title: Data Inicio
+        data_vencimento_contrato:
+          type: string
+          format: date
+          title: Data Vencimento Contrato
+        telefone:
+          type: string
+          maxLength: 20
+          minLength: 8
+          title: Telefone
+        observacoes:
+          type: string
+          maxLength: 1000
+          title: Observacoes
+          default: ''
+        status:
+          type: string
+          maxLength: 30
+          title: Status
+          default: ativo
+      type: object
+      required:
+      - nome
+      - email
+      - cargo
+      - departamento
+      - data_inicio
+      - data_vencimento_contrato
+      - telefone
+      title: ProfessionalInput
+    ProfessionalOutput:
+      properties:
+        nome:
+          type: string
+          maxLength: 120
+          minLength: 2
+          title: Nome
+        email:
+          type: string
+          format: email
+          title: Email
+        cargo:
+          type: string
+          maxLength: 80
+          minLength: 2
+          title: Cargo
+        departamento:
+          type: string
+          maxLength: 80
+          minLength: 2
+          title: Departamento
+        data_inicio:
+          type: string
+          format: date
+          title: Data Inicio
+        data_vencimento_contrato:
+          type: string
+          format: date
+          title: Data Vencimento Contrato
+        telefone:
+          type: string
+          maxLength: 20
+          minLength: 8
+          title: Telefone
+        observacoes:
+          type: string
+          maxLength: 1000
+          title: Observacoes
+          default: ''
+        status:
+          type: string
+          maxLength: 30
+          title: Status
+          default: ativo
+        id:
+          type: integer
+          title: Id
+      type: object
+      required:
+      - nome
+      - email
+      - cargo
+      - departamento
+      - data_inicio
+      - data_vencimento_contrato
+      - telefone
+      - id
+      title: ProfessionalOutput
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
