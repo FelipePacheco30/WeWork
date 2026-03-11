@@ -1,25 +1,65 @@
 # Frontend WeWork
 
-Aplicacao React + Vite + TypeScript + Tailwind para gestao de profissionais.
+Interface React moderna para cadastro de profissionais, inspirada na estética do WallJobs e adaptada ao contexto WeWork.
 
-## Rodar local
+## Stack
+
+- Vite + React + TypeScript
+- Tailwind CSS
+- React Router
+- React Query
+- React Hook Form + Zod
+- Vitest + Testing Library
+
+## Executar localmente
 
 ```bash
 npm install
+cp .env.local.example .env.local
 npm run dev
 ```
 
-## Funcionalidades
+Aplicação em: `http://localhost:5173`
 
-- Cadastro e edicao de profissionais
-- Exibicao em tabela responsiva
-- Filtros por nome/cargo/departamento/data
-- Exportacao CSV via endpoint do backend
+## Variáveis de ambiente
 
-## Testes e qualidade
+Arquivo `.env.local.example`:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
+
+## Fluxos implementados
+
+- Listagem de profissionais com paginação server-side
+- Filtros por nome/e-mail, cargo, departamento, data de início e contratos vencendo em X dias
+- Ordenação visual por vencimento de contrato na tabela
+- Cadastro e edição via modal com validação de formulário
+- Ações por linha: visualizar, editar e inativar (soft delete)
+- Exportação CSV via endpoint backend (`/api/v1/professionals/export/csv`)
+- Página de detalhe do profissional
+
+## Testes
 
 ```bash
-npm run lint
 npm run test
+```
+
+Arquivos de teste de exemplo:
+
+- `src/components/FilterBar.test.tsx`
+- `src/features/professionals/Form.test.tsx`
+
+## Build
+
+```bash
 npm run build
 ```
+
+## Como validar manualmente
+
+1. Suba backend e frontend
+2. Abra a listagem, aplique filtros e navegue entre páginas
+3. Crie um novo profissional pelo botão "Novo profissional"
+4. Edite e inative um registro
+5. Clique em "Exportar CSV" e confirme o download

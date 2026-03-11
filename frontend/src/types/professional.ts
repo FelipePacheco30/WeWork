@@ -1,25 +1,46 @@
-export type ProfessionalStatus = "ativo" | "inativo" | "ferias" | "afastado";
+export type ProfessionalStatus = "ativo" | "inativo" | "licencia";
 
 export interface Professional {
-  id: number;
+  id: string;
   nome: string;
   email: string;
   cargo: string;
   departamento: string;
+  telefone: string;
   data_inicio: string;
   data_vencimento_contrato: string;
-  telefone: string;
-  observacoes: string;
   status: ProfessionalStatus;
+  observacoes: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
-export interface ProfessionalInput extends Omit<Professional, "id"> {}
+export interface ProfessionalInput {
+  nome: string;
+  email: string;
+  cargo: string;
+  departamento: string;
+  telefone: string;
+  data_inicio: string;
+  data_vencimento_contrato: string;
+  status: ProfessionalStatus;
+  observacoes?: string | null;
+}
 
 export interface ProfessionalFilters {
-  nome?: string;
+  page?: number;
+  page_size?: number;
+  q?: string;
   cargo?: string;
   departamento?: string;
-  data_inicio_de?: string;
-  data_inicio_ate?: string;
-  vencendo_em_dias?: number;
+  start_from?: string;
+  start_to?: string;
+  contract_due_within_days?: number;
+}
+
+export interface ProfessionalsListResponse {
+  items: Professional[];
+  total: number;
+  page: number;
+  page_size: number;
 }

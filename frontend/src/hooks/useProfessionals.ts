@@ -1,59 +1,73 @@
-import { useCallback, useEffect, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 import {
   createProfessional,
   deleteProfessional,
+  getProfessional,
   listProfessionals,
+  patchProfessional,
   updateProfessional,
-} from "../services/api";
-import type { Professional, ProfessionalFilters, ProfessionalInput } from "../types/professional";
+} from "@/services/api";
+import type { ProfessionalFilters, ProfessionalInput } from "@/types/professional";
 
-export function useProfessionals() {
-  const [items, setItems] = useState<Professional[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<ProfessionalFilters>({});
+export const professionalsQueryKey = (filters: ProfessionalFilters) => ["professionals", filters];
 
-  const fetchItems = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await listProfessionals(filters);
-      setItems(data);
-    } catch {
-      setError("Falha ao carregar profissionais.");
-    } finally {
-      setLoading(false);
-    }
-  }, [filters]);
+export function useProfessionals(filters: ProfessionalFilters) {
+  return useQuery({
+    queryKey: professionalsQueryKey(filters),
+    queryFn: () => listProfessionals(filters),
+    placeholderData: (previousData) => previousData,
+  });
+}
 
-  useEffect(() => {
-    void fetchItems();
-  }, [fetchItems]);
+export function useProfessional(id: string) {
+  return useQuery({
+    queryKey: ["professional", id],
+    queryFn: () => getProfessional(id),
+    enabled: Boolean(id),
+  });
+}
 
-  const create = useCallback(async (payload: ProfessionalInput) => {
-    await createProfessional(payload);
-    await fetchItems();
-  }, [fetchItems]);
+export function useCreateProfessional() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: ProfessionalInput) => createProfessional(payload),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["professionals"] });
+    },
+  });
+}
 
-  const update = useCallback(async (id: number, payload: ProfessionalInput) => {
-    await updateProfessional(id, payload);
-    await fetchItems();
-  }, [fetchItems]);
+export function useUpdateProfessional() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: ProfessionalInput }) =>
+      updateProfessional(id, payload),
+    onSuccess: async (professional) => {
+      await queryClient.invalidateQueries({ queryKey: ["professionals"] });
+      queryClient.setQueryData(["professional", professional.id], professional);
+    },
+  });
+}
 
-  const remove = useCallback(async (id: number) => {
-    await deleteProfessional(id);
-    await fetchItems();
-  }, [fetchItems]);
+export function usePatchProfessional() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, payload }: { id: string; payload: Partial<ProfessionalInput> }) =>
+      patchProfessional(id, payload),
+    onSuccess: async (professional) => {
+      await queryClient.invalidateQueries({ queryKey: ["professionals"] });
+      queryClient.setQueryData(["professional", professional.id], professional);
+    },
+  });
+}
 
-  return {
-    items,
-    loading,
-    error,
-    filters,
-    setFilters,
-    create,
-    update,
-    remove,
-    refresh: fetchItems,
-  };
+export function useSoftDeleteProfessional() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteProfessional(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["professionals"] });
+    },
+  });
 }
