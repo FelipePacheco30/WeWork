@@ -6,6 +6,8 @@ import { FilterBar } from "@/components/FilterBar";
 import { Modal } from "@/components/Modal";
 import {
   useCreateProfessional,
+  useHardDeleteProfessional,
+  usePatchProfessional,
   useProfessional,
   useProfessionals,
   useSoftDeleteProfessional,
@@ -31,7 +33,9 @@ export function ProfessionalsListPage() {
   const listQuery = useProfessionals(filters);
   const createMutation = useCreateProfessional();
   const updateMutation = useUpdateProfessional();
+  const patchMutation = usePatchProfessional();
   const deleteMutation = useSoftDeleteProfessional();
+  const hardDeleteMutation = useHardDeleteProfessional();
   const selectedQuery = useProfessional(selectedProfessionalId ?? "");
 
   const csvExportUrl = useMemo(() => getExportCsvUrl(filters), [filters]);
@@ -137,8 +141,18 @@ export function ProfessionalsListPage() {
               setSelectedProfessionalId(item.id);
               smoothScrollTo("detalhes");
             }}
-            onDelete={(id) => {
-              void deleteMutation.mutateAsync(id);
+            onInactivate={(item) => {
+              if (item.status === "inativo") return;
+              void deleteMutation.mutateAsync(item.id);
+            }}
+            onActivate={(item) => {
+              if (item.status === "ativo") return;
+              void patchMutation.mutateAsync({ id: item.id, payload: { status: "ativo" } });
+            }}
+            onDeletePermanent={(item) => {
+              const confirmed = window.confirm(`Deseja excluir permanentemente ${item.nome}?`);
+              if (!confirmed) return;
+              void hardDeleteMutation.mutateAsync(item.id);
             }}
           />
 

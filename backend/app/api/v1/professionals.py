@@ -113,3 +113,12 @@ async def delete_professional(
 ) -> Response:
     await service.soft_delete(professional_id)
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.delete("/{professional_id}/permanent", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_professional_permanent(
+    professional_id: UUID,
+    service: ProfessionalService = Depends(get_professional_service),
+) -> Response:
+    await service.hard_delete(professional_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

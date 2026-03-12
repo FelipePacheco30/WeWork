@@ -50,5 +50,9 @@ class ProfessionalRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    async def hard_delete(self, professional_id: UUID) -> bool:
+        raise NotImplementedError
+
+    @abstractmethod
     async def list_contracts_due_within_days(self, days: int) -> list[Professional]:
         raise NotImplementedError

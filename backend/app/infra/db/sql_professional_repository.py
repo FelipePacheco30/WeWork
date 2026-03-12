@@ -155,6 +155,14 @@ class SQLProfessionalRepository(ProfessionalRepository):
         await self.session.commit()
         return True
 
+    async def hard_delete(self, professional_id: UUID) -> bool:
+        row = await self.session.get(ProfessionalORM, professional_id)
+        if row is None:
+            return False
+        await self.session.delete(row)
+        await self.session.commit()
+        return True
+
     async def list_contracts_due_within_days(self, days: int) -> list[Professional]:
         limit = date.today() + timedelta(days=days)
         stmt = (

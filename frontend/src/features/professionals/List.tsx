@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/Button";
@@ -8,7 +9,9 @@ interface ProfessionalsListTableProps {
   items: Professional[];
   onEdit: (item: Professional) => void;
   onView: (item: Professional) => void;
-  onDelete: (id: string) => void;
+  onInactivate: (item: Professional) => void;
+  onActivate: (item: Professional) => void;
+  onDeletePermanent: (item: Professional) => void;
 }
 
 function formatDate(dateValue: string) {
@@ -22,7 +25,17 @@ function isExpired(dateValue: string) {
   return target < today;
 }
 
-export function ProfessionalsListTable({ items, onEdit, onView, onDelete }: ProfessionalsListTableProps) {
+export function ProfessionalsListTable({
+  items,
+  onEdit,
+  onView,
+  onInactivate,
+  onActivate,
+  onDeletePermanent,
+}: ProfessionalsListTableProps) {
+  const [openOptionsFor, setOpenOptionsFor] = useState<string | null>(null);
+  const [openAboutFor, setOpenAboutFor] = useState<string | null>(null);
+
   const columns: Array<DataColumn<Professional>> = [
     {
       key: "nome",
@@ -64,33 +77,98 @@ export function ProfessionalsListTable({ items, onEdit, onView, onDelete }: Prof
       header: "Acoes",
       render: (item) => (
         <div className="flex flex-wrap gap-2">
-          <Button
-            variant="ghost"
-            className="min-w-[88px] text-slate-200 hover:bg-white/10"
-            onClick={() => onEdit(item)}
-            aria-label={`Editar ${item.nome}`}
-          >
-            Editar
-          </Button>
-          <Button
-            variant="secondary"
-            className="min-w-[88px] bg-transparent text-slate-200 hover:bg-white/10"
-            onClick={() => onView(item)}
-          >
-            Detalhe
-          </Button>
-          <Link
-            to={`/professionals/${item.id}`}
-            className="inline-flex min-w-[88px] items-center justify-center rounded-none border border-brand-500/60 px-4 py-2.5 text-sm font-semibold text-brand-300 transition-colors hover:bg-brand-500/10 hover:text-brand-200"
-          >
-            Pagina
-          </Link>
-          <Button variant="danger" className="min-w-[88px]" onClick={() => onDelete(item.id)} aria-label={`Inativar ${item.nome}`}>
-            Inativar
-          </Button>
+          <div className="relative">
+            <Button
+              variant="secondary"
+              className="min-w-[96px] bg-transparent text-slate-200 hover:bg-white/10"
+              onClick={() =>
+                setOpenOptionsFor((prev) => {
+                  setOpenAboutFor(null);
+                  return prev === item.id ? null : item.id;
+                })
+              }
+            >
+              Opcoes
+            </Button>
+            {openOptionsFor === item.id ? (
+              <div className="absolute right-0 z-20 mt-1 flex min-w-[140px] flex-col border border-white/10 bg-slate-900/95 p-1">
+                <button
+                  className="px-3 py-2 text-left text-sm text-slate-100 transition hover:bg-white/10"
+                  onClick={() => {
+                    setOpenOptionsFor(null);
+                    onEdit(item);
+                  }}
+                >
+                  Editar
+                </button>
+                <button
+                  className="px-3 py-2 text-left text-sm text-slate-100 transition hover:bg-white/10"
+                  onClick={() => {
+                    setOpenOptionsFor(null);
+                    onInactivate(item);
+                  }}
+                >
+                  Inativar
+                </button>
+                <button
+                  className="px-3 py-2 text-left text-sm text-slate-100 transition hover:bg-white/10"
+                  onClick={() => {
+                    setOpenOptionsFor(null);
+                    onActivate(item);
+                  }}
+                >
+                  Ativar
+                </button>
+                <button
+                  className="px-3 py-2 text-left text-sm text-red-300 transition hover:bg-red-500/10"
+                  onClick={() => {
+                    setOpenOptionsFor(null);
+                    onDeletePermanent(item);
+                  }}
+                >
+                  Excluir
+                </button>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="relative">
+            <Button
+              variant="secondary"
+              className="min-w-[96px] bg-transparent text-slate-200 hover:bg-white/10"
+              onClick={() =>
+                setOpenAboutFor((prev) => {
+                  setOpenOptionsFor(null);
+                  return prev === item.id ? null : item.id;
+                })
+              }
+            >
+              Sobre
+            </Button>
+            {openAboutFor === item.id ? (
+              <div className="absolute right-0 z-20 mt-1 flex min-w-[140px] flex-col border border-white/10 bg-slate-900/95 p-1">
+                <button
+                  className="px-3 py-2 text-left text-sm text-slate-100 transition hover:bg-white/10"
+                  onClick={() => {
+                    setOpenAboutFor(null);
+                    onView(item);
+                  }}
+                >
+                  Detalhe
+                </button>
+                <Link
+                  to={`/professionals/${item.id}`}
+                  className="px-3 py-2 text-left text-sm text-brand-300 transition hover:bg-brand-500/10 hover:text-brand-200"
+                  onClick={() => setOpenAboutFor(null)}
+                >
+                  Pagina
+                </Link>
+              </div>
+            ) : null}
+          </div>
         </div>
       ),
-      className: "w-[26rem]",
+      className: "w-[16rem]",
     },
   ];
 

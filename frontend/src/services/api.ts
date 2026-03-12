@@ -63,6 +63,10 @@ export async function deleteProfessional(id: string): Promise<void> {
   await api.delete(`/api/v1/professionals/${id}`);
 }
 
+export async function deleteProfessionalPermanent(id: string): Promise<void> {
+  await api.delete(`/api/v1/professionals/${id}/permanent`);
+}
+
 export function getExportCsvUrl(filters: ProfessionalFilters): string {
   const params = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {

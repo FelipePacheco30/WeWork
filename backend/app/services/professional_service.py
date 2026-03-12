@@ -98,6 +98,11 @@ class ProfessionalService:
         if not ok:
             raise NotFoundError("profissional não encontrado")
 
+    async def hard_delete(self, professional_id: UUID) -> None:
+        ok = await self.repository.hard_delete(professional_id)
+        if not ok:
+            raise NotFoundError("profissional não encontrado")
+
     async def export_csv(
         self,
         *,

@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   createProfessional,
   deleteProfessional,
+  deleteProfessionalPermanent,
   getProfessional,
   listProfessionals,
   patchProfessional,
@@ -66,6 +67,16 @@ export function useSoftDeleteProfessional() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => deleteProfessional(id),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["professionals"] });
+    },
+  });
+}
+
+export function useHardDeleteProfessional() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteProfessionalPermanent(id),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["professionals"] });
     },
