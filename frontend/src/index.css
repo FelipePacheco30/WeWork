@@ -16,10 +16,14 @@ body,
   min-height: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  @apply antialiased text-slate-900;
+  @apply antialiased text-slate-100;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  background-color: #f5ffff;
+  background-color: #020617;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 

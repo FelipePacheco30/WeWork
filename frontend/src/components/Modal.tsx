@@ -31,10 +31,10 @@ export function Modal({ open, title, onClose, children }: ModalProps) {
         aria-modal="true"
         aria-labelledby={headingId}
         tabIndex={-1}
-        className="max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl bg-white p-5 shadow-2xl outline-none md:p-6"
+        className="max-h-[90vh] w-full max-w-3xl overflow-auto border border-white/10 bg-slate-950 p-5 shadow-2xl outline-none md:p-6"
         onMouseDown={(event) => event.stopPropagation()}
       >
-        <h2 id={headingId} className="mb-4 text-lg font-semibold text-slate-800">
+        <h2 id={headingId} className="mb-4 text-lg font-semibold text-white">
           {title}
         </h2>
         {children}

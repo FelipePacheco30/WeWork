@@ -7,6 +7,7 @@ import type { Professional } from "@/types/professional";
 interface ProfessionalsListTableProps {
   items: Professional[];
   onEdit: (item: Professional) => void;
+  onView: (item: Professional) => void;
   onDelete: (id: string) => void;
 }
 
@@ -14,7 +15,7 @@ function formatDate(dateValue: string) {
   return new Date(`${dateValue}T00:00:00`).toLocaleDateString("pt-BR");
 }
 
-export function ProfessionalsListTable({ items, onEdit, onDelete }: ProfessionalsListTableProps) {
+export function ProfessionalsListTable({ items, onEdit, onView, onDelete }: ProfessionalsListTableProps) {
   const columns: Array<DataColumn<Professional>> = [
     {
       key: "nome",
@@ -29,15 +30,20 @@ export function ProfessionalsListTable({ items, onEdit, onDelete }: Professional
     { key: "cargo", header: "Cargo", render: (item) => item.cargo },
     { key: "departamento", header: "Departamento", render: (item) => item.departamento },
     {
+      key: "inicio",
+      header: "Data de inicio",
+      render: (item) => <span className="text-slate-300">{formatDate(item.data_inicio)}</span>,
+    },
+    {
       key: "vencimento",
-      header: "Vencimento",
-      render: (item) => <span className="font-medium text-brand-900">{formatDate(item.data_vencimento_contrato)}</span>,
+      header: "Data de vencimento",
+      render: (item) => <span className="font-medium text-brand-300">{formatDate(item.data_vencimento_contrato)}</span>,
     },
     {
       key: "status",
       header: "Status",
       render: (item) => (
-        <span className="rounded-full bg-brand-300/40 px-2 py-1 text-xs font-semibold capitalize text-brand-900">
+        <span className="rounded-full border border-brand-500/40 bg-brand-500/10 px-2 py-1 text-xs font-semibold capitalize text-brand-300">
           {item.status}
         </span>
       ),
@@ -46,22 +52,22 @@ export function ProfessionalsListTable({ items, onEdit, onDelete }: Professional
       key: "acoes",
       header: "Acoes",
       render: (item) => (
-        <div className="flex gap-1">
-          <Button variant="ghost" onClick={() => onEdit(item)} aria-label={`Editar ${item.nome}`}>
+        <div className="flex flex-wrap gap-1">
+          <Button variant="ghost" className="text-slate-200 hover:bg-white/10" onClick={() => onEdit(item)} aria-label={`Editar ${item.nome}`}>
             Editar
           </Button>
-          <Link
-            to={`/professionals/${item.id}`}
-            className="inline-flex items-center rounded-xl px-2 py-1.5 text-sm font-semibold text-brand-900 hover:bg-brand-50"
-          >
-            Ver
+          <Button variant="secondary" className="bg-transparent text-slate-200 hover:bg-white/10" onClick={() => onView(item)}>
+            Detalhe
+          </Button>
+          <Link to={`/professionals/${item.id}`} className="inline-flex items-center px-2 py-1.5 text-sm font-semibold text-brand-300 hover:text-brand-200">
+            Pagina
           </Link>
           <Button variant="danger" onClick={() => onDelete(item.id)} aria-label={`Inativar ${item.nome}`}>
             Inativar
           </Button>
         </div>
       ),
-      className: "w-56",
+      className: "w-72",
     },
   ];
 

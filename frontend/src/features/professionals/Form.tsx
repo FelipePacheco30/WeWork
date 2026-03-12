@@ -98,12 +98,12 @@ export function ProfessionalForm({ initialData, loading = false, onCancel, onSub
       />
       <Input id="telefone" label="Telefone" error={errors.telefone?.message} {...register("telefone")} />
       <div className="space-y-1.5">
-        <label htmlFor="status" className="text-sm font-medium text-slate-700">
+        <label htmlFor="status" className="text-sm font-medium text-slate-300">
           Status
         </label>
         <select
           id="status"
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-300/40"
+          className="w-full border border-white/15 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-300/30"
           {...register("status")}
         >
           <option value="ativo">Ativo</option>
@@ -126,13 +126,13 @@ export function ProfessionalForm({ initialData, loading = false, onCancel, onSub
         {...register("data_vencimento_contrato")}
       />
       <div className="space-y-1.5 md:col-span-2">
-        <label htmlFor="observacoes" className="text-sm font-medium text-slate-700">
+        <label htmlFor="observacoes" className="text-sm font-medium text-slate-300">
           Observacoes
         </label>
         <textarea
           id="observacoes"
           rows={3}
-          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-300/40"
+          className="w-full border border-white/15 bg-slate-900/70 px-3 py-2.5 text-sm text-slate-100 placeholder:text-slate-500 focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-300/30"
           {...register("observacoes")}
         />
       </div>
