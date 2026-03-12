@@ -3,6 +3,8 @@ services:
     name: wework-backend
     env: docker
     rootDir: backend
+    dockerfilePath: backend/Dockerfile
+    dockerContext: backend
     plan: free
     autoDeploy: true
     healthCheckPath: /api/v1/health
@@ -20,6 +22,8 @@ services:
     name: wework-frontend
     env: docker
     rootDir: frontend
+    dockerfilePath: frontend/Dockerfile
+    dockerContext: frontend
     plan: free
     autoDeploy: true
     envVars:
