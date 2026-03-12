@@ -28,7 +28,7 @@ services:
     autoDeploy: true
     envVars:
       - key: VITE_API_URL
-        value: https://wework-backend.onrender.com
+        value: https://wework-backend-go23.onrender.com
 
 databases:
   - name: wework-db
