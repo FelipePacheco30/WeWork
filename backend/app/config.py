@@ -1,7 +1,7 @@
 from functools import lru_cache
 from urllib.parse import urlparse, urlunparse
 
-from pydantic import field_validator
+from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,7 +9,10 @@ class Settings(BaseSettings):
     app_name: str = "WeWork API"
     app_env: str = "development"
     database_url: str = "postgresql+asyncpg://wework:wework@localhost:5432/wework"
-    cors_origins: list[str] = ["http://localhost:5173"]
+    cors_origins: list[str] = Field(
+        default=["http://localhost:5173"],
+        validation_alias=AliasChoices("CORS_ORIGINS", "ALLOWED_ORIGINS"),
+    )
     contracts_due_window_days: int = 30
     scheduler_enabled: bool = True
     log_level: str = "INFO"
