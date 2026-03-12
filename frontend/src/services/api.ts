@@ -1,5 +1,6 @@
 import axios from "axios";
 import type {
+  FilterOptions,
   Professional,
   ProfessionalFilters,
   ProfessionalInput,
@@ -11,12 +12,27 @@ export const api = axios.create({
   timeout: 10000,
 });
 
+export async function getFilterOptions(): Promise<FilterOptions> {
+  const response = await api.get<FilterOptions>("/api/v1/professionals/filter-options");
+  return response.data;
+}
+
 export async function listProfessionals(
   filters: ProfessionalFilters,
 ): Promise<ProfessionalsListResponse> {
-  const response = await api.get<ProfessionalsListResponse>("/api/v1/professionals", {
-    params: filters,
+  const params: Record<string, unknown> = {};
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value === undefined || value === null || value === "") return;
+    if (Array.isArray(value)) {
+      value.forEach((v) => {
+        if (!params[key]) params[key] = [];
+        (params[key] as string[]).push(String(v));
+      });
+    } else {
+      params[key] = value;
+    }
   });
+  const response = await api.get<ProfessionalsListResponse>("/api/v1/professionals", { params });
   return response.data;
 }
 
@@ -50,7 +66,10 @@ export async function deleteProfessional(id: string): Promise<void> {
 export function getExportCsvUrl(filters: ProfessionalFilters): string {
   const params = new URLSearchParams();
   Object.entries(filters).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
+    if (value === undefined || value === null || value === "") return;
+    if (Array.isArray(value)) {
+      value.forEach((v) => params.append(key, String(v)));
+    } else {
       params.append(key, String(value));
     }
   });

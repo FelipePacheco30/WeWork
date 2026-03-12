@@ -24,13 +24,20 @@ async def create_professional(
     return await service.create(payload)
 
 
+@router.get("/filter-options")
+async def get_filter_options(
+    service: ProfessionalService = Depends(get_professional_service),
+) -> dict:
+    return await service.get_filter_options()
+
+
 @router.get("", response_model=ProfessionalListResponse)
 async def list_professionals(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=20, ge=1, le=200),
     q: str | None = Query(default=None),
-    cargo: str | None = Query(default=None),
-    departamento: str | None = Query(default=None),
+    cargo: list[str] | None = Query(default=None),
+    departamento: list[str] | None = Query(default=None),
     start_from: date | None = Query(default=None),
     start_to: date | None = Query(default=None),
     contract_due_within_days: int | None = Query(default=None, ge=0, le=365),
@@ -51,8 +58,8 @@ async def list_professionals(
 @router.get("/export/csv", response_class=Response)
 async def export_professionals_csv(
     q: str | None = Query(default=None),
-    cargo: str | None = Query(default=None),
-    departamento: str | None = Query(default=None),
+    cargo: list[str] | None = Query(default=None),
+    departamento: list[str] | None = Query(default=None),
     start_from: date | None = Query(default=None),
     start_to: date | None = Query(default=None),
     contract_due_within_days: int | None = Query(default=None, ge=0, le=365),

@@ -20,7 +20,7 @@ export function Button({ variant = "primary", className = "", leftIcon, children
   return (
     <button
       className={[
-        "inline-flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold",
+        "inline-flex items-center justify-center gap-2 rounded-none px-4 py-2.5 text-sm font-semibold",
         "transition-colors duration-300 focus-visible:outline-none focus-visible:ring-4",
         "disabled:cursor-not-allowed disabled:opacity-60",
         variantClassMap[variant],

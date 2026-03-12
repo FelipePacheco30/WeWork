@@ -31,11 +31,16 @@ export interface ProfessionalFilters {
   page?: number;
   page_size?: number;
   q?: string;
-  cargo?: string;
-  departamento?: string;
+  cargo?: string[];
+  departamento?: string[];
   start_from?: string;
   start_to?: string;
   contract_due_within_days?: number;
+}
+
+export interface FilterOptions {
+  cargos: string[];
+  departamentos: string[];
 }
 
 export interface ProfessionalsListResponse {

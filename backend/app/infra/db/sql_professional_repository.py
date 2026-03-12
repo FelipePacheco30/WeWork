@@ -61,14 +61,21 @@ class SQLProfessionalRepository(ProfessionalRepository):
             return None
         return self._to_domain(row)
 
+    async def get_filter_options(self) -> tuple[list[str], list[str]]:
+        cargos_stmt = select(ProfessionalORM.cargo).distinct().order_by(ProfessionalORM.cargo)
+        deps_stmt = select(ProfessionalORM.departamento).distinct().order_by(ProfessionalORM.departamento)
+        cargos = (await self.session.execute(cargos_stmt)).scalars().all()
+        deps = (await self.session.execute(deps_stmt)).scalars().all()
+        return ([c for c in cargos if c], [d for d in deps if d])
+
     async def list(
         self,
         *,
         page: int,
         page_size: int,
         q: str | None,
-        cargo: str | None,
-        departamento: str | None,
+        cargo: list[str] | None,
+        departamento: list[str] | None,
         start_from: date | None,
         start_to: date | None,
         contract_due_within_days: int | None,
@@ -81,9 +88,9 @@ class SQLProfessionalRepository(ProfessionalRepository):
             term = f"%{q}%"
             conditions.append(or_(ProfessionalORM.nome.ilike(term), ProfessionalORM.email.ilike(term)))
         if cargo:
-            conditions.append(ProfessionalORM.cargo.ilike(f"%{cargo}%"))
+            conditions.append(ProfessionalORM.cargo.in_(cargo))
         if departamento:
-            conditions.append(ProfessionalORM.departamento.ilike(f"%{departamento}%"))
+            conditions.append(ProfessionalORM.departamento.in_(departamento))
         if start_from:
             conditions.append(ProfessionalORM.data_inicio >= start_from)
         if start_to:

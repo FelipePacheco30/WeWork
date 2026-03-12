@@ -17,14 +17,19 @@ class ProfessionalRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
+    async def get_filter_options(self) -> tuple[list[str], list[str]]:
+        """Return (distinct cargos, distinct departamentos) from all professionals."""
+        raise NotImplementedError
+
+    @abstractmethod
     async def list(
         self,
         *,
         page: int,
         page_size: int,
         q: str | None,
-        cargo: str | None,
-        departamento: str | None,
+        cargo: list[str] | None,
+        departamento: list[str] | None,
         start_from: date | None,
         start_to: date | None,
         contract_due_within_days: int | None,

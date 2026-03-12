@@ -23,6 +23,7 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: wework-backend
+    working_dir: /app
     env_file:
       - .env
     environment:
@@ -30,6 +31,7 @@ services:
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173}
       APP_ENV: ${APP_ENV:-development}
       SECRET_KEY: ${SECRET_KEY:-change-me}
+      PYTHONPATH: /app
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     depends_on:

@@ -49,13 +49,10 @@ export function ProfessionalsListPage() {
 
   return (
     <div className="space-y-0 text-slate-100">
-      <section id="hero" className="relative overflow-hidden border border-white/10 bg-slate-950 px-6 py-20 md:px-12 md:py-28">
+      <section id="hero" className="relative overflow-hidden bg-slate-950 px-6 py-20 md:px-12 md:py-28">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(0,90,205,0.35),transparent_55%)]" />
         <div className="relative mx-auto grid max-w-7xl gap-8 md:grid-cols-2">
           <div>
-            <span className="inline-flex items-center border border-brand-500/40 bg-brand-500/10 px-3 py-1 text-xs tracking-[0.2em] text-brand-300">
-              Plataforma de cadastro com IA
-            </span>
             <h1 className="mt-4 text-4xl font-extrabold leading-tight text-white md:text-6xl">
               Cadastre, organize e acompanhe
               <span className="block text-brand-500">os melhores profissionais</span>
@@ -128,7 +125,7 @@ export function ProfessionalsListPage() {
               onExportPdf={() => exportProfessionalsPdf(items)}
             />
           </div>
-          <FilterBar initialValue={filters} onApply={setFilters} onClear={() => setFilters(defaultFilters)} />
+          <FilterBar initialValue={filters} onApply={setFilters} />
 
           {listQuery.isLoading ? <p className="text-sm text-slate-400">Carregando profissionais...</p> : null}
           {listQuery.isError ? <p className="text-sm text-red-400">Erro ao carregar dados. Tente novamente.</p> : null}
@@ -149,7 +146,7 @@ export function ProfessionalsListPage() {
             <p className="text-sm text-slate-300">
               Mostrando pagina {page} de {totalPages} ({total} registros)
             </p>
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button
                 variant="secondary"
                 disabled={page <= 1}

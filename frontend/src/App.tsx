@@ -17,12 +17,8 @@ function AppHeader() {
   return (
     <header className="fixed inset-x-0 top-0 z-40 border-b border-white/10 bg-slate-950/85 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 md:px-6">
-        <Link to="/" className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Logo WeWork com dois W" className="h-10 w-10" />
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-white">WeWork</h1>
-            <p className="text-xs text-slate-400">Plataforma de profissionais</p>
-          </div>
+        <Link to="/" className="flex items-center">
+          <img src="/WeWorkLogo.png" alt="Logo WeWork" className="h-20 w-auto object-contain md:h-16" />
         </Link>
         <nav className="hidden items-center gap-2 md:flex">
           {navItems.map((item) =>
@@ -56,8 +52,7 @@ function AppFooter() {
       <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:grid-cols-4 md:px-6">
         <div>
           <div className="flex items-center gap-3">
-            <img src="/logo.svg" alt="Logo WeWork com dois W" className="h-9 w-9" />
-            <p className="text-lg font-bold text-white">WeWork</p>
+            <img src="/WeWorkLogo.png" alt="Logo WeWork" className="h-18 w-auto object-contain md:h-14" />
           </div>
           <p className="mt-3 text-sm text-slate-400">Conectando empresas a profissionais com operacao simples e visual premium.</p>
         </div>

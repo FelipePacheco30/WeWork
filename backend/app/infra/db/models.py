@@ -23,7 +23,12 @@ class ProfessionalORM(Base):
     data_inicio: Mapped[date] = mapped_column(Date, nullable=False, index=True)
     data_vencimento_contrato: Mapped[date] = mapped_column(Date, nullable=False, index=True)
     status: Mapped[ProfessionalStatus] = mapped_column(
-        Enum(ProfessionalStatus, name="professional_status", native_enum=False),
+        Enum(
+            ProfessionalStatus,
+            name="professional_status",
+            native_enum=False,
+            values_callable=lambda enum_cls: [item.value for item in enum_cls],
+        ),
         nullable=False,
         default=ProfessionalStatus.ATIVO,
         index=True,

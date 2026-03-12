@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import csv
 from datetime import date
 from io import StringIO
@@ -30,27 +32,34 @@ class ProfessionalService:
             raise NotFoundError("profissional não encontrado")
         return ProfessionalRead.model_validate(item)
 
+    async def get_filter_options(self) -> dict:
+        cargos, departamentos = await self.repository.get_filter_options()
+        return {"cargos": cargos, "departamentos": departamentos}
+
     async def list(
         self,
         *,
         page: int,
         page_size: int,
         q: str | None,
-        cargo: str | None,
-        departamento: str | None,
+        cargo: list[str] | None,
+        departamento: list[str] | None,
         start_from: date | None,
         start_to: date | None,
         contract_due_within_days: int | None,
     ) -> ProfessionalListResponse:
+        cargo_list = [c for c in (cargo or []) if c]
+        dep_list = [d for d in (departamento or []) if d]
         items, total = await self.repository.list(
             page=page,
             page_size=page_size,
             q=q,
-            cargo=cargo,
-            departamento=departamento,
+            cargo=cargo_list if cargo_list else None,
+            departamento=dep_list if dep_list else None,
             start_from=start_from,
             start_to=start_to,
             contract_due_within_days=contract_due_within_days,
+            include_inactive=True,
         )
         return ProfessionalListResponse(
             items=[ProfessionalRead.model_validate(item) for item in items],
@@ -93,21 +102,24 @@ class ProfessionalService:
         self,
         *,
         q: str | None,
-        cargo: str | None,
-        departamento: str | None,
+        cargo: list[str] | None,
+        departamento: list[str] | None,
         start_from: date | None,
         start_to: date | None,
         contract_due_within_days: int | None,
     ) -> str:
+        cargo_list = [c for c in (cargo or []) if c]
+        dep_list = [d for d in (departamento or []) if d]
         rows, _ = await self.repository.list(
             page=1,
             page_size=10_000,
             q=q,
-            cargo=cargo,
-            departamento=departamento,
+            cargo=cargo_list if cargo_list else None,
+            departamento=dep_list if dep_list else None,
             start_from=start_from,
             start_to=start_to,
             contract_due_within_days=contract_due_within_days,
+            include_inactive=True,
         )
         output = StringIO()
         writer = csv.writer(output)
