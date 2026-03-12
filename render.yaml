@@ -5,11 +5,11 @@ services:
     rootDir: backend
     plan: free
     autoDeploy: true
-    healthCheckPath: /health
+    healthCheckPath: /api/v1/health
     envVars:
       - key: APP_ENV
         value: production
-      - key: ALLOWED_ORIGINS
+      - key: CORS_ORIGINS
         value: https://wework-frontend.onrender.com
       - key: DATABASE_URL
         fromDatabase:
@@ -23,7 +23,7 @@ services:
     plan: free
     autoDeploy: true
     envVars:
-      - key: VITE_API_BASE_URL
+      - key: VITE_API_URL
         value: https://wework-backend.onrender.com
 
 databases:

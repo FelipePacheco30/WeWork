@@ -1,4 +1,5 @@
 from functools import lru_cache
+from urllib.parse import urlparse, urlunparse
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -25,6 +26,17 @@ class Settings(BaseSettings):
     def parse_cors_origins(cls, value: str | list[str]) -> list[str]:
         if isinstance(value, str):
             return [item.strip() for item in value.split(",") if item.strip()]
+        return value
+
+    @field_validator("database_url", mode="before")
+    @classmethod
+    def normalize_database_url(cls, value: str) -> str:
+        """Accept Render postgres URLs and normalize to asyncpg dialect."""
+        if value.startswith("postgres://"):
+            value = value.replace("postgres://", "postgresql://", 1)
+        if value.startswith("postgresql://"):
+            parsed = urlparse(value)
+            value = urlunparse(parsed._replace(scheme="postgresql+asyncpg"))
         return value
 
 
