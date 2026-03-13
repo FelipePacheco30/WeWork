@@ -31,7 +31,7 @@ def build_seed_data(today: date) -> list[dict]:
             "data_inicio": today - timedelta(days=200),
             "data_vencimento_contrato": today + timedelta(days=15),
             "observacoes": "Foco em BI.",
-            "status": ProfessionalStatus.LICENCIA,
+            "status": ProfessionalStatus.ATIVO,
         },
         {
             "nome": "Bruna Matos",
@@ -86,7 +86,7 @@ def build_seed_data(today: date) -> list[dict]:
             "data_inicio": today - timedelta(days=360),
             "data_vencimento_contrato": today + timedelta(days=120),
             "observacoes": "Roadmap de plataforma.",
-            "status": ProfessionalStatus.LICENCIA,
+            "status": ProfessionalStatus.ATIVO,
         },
         {
             "nome": "Igor Freitas",
@@ -238,12 +238,15 @@ async def seed() -> None:
     async with AsyncSessionLocal() as session:
         today = date.today()
 
-        # Remove opções "teste" dos filtros: atualiza registros que foram criados em teste
+        # Normaliza registros antigos
         await session.execute(
             update(ProfessionalORM).where(ProfessionalORM.cargo == "teste").values(cargo="Engenheira de Software")
         )
         await session.execute(
             update(ProfessionalORM).where(ProfessionalORM.departamento == "teste").values(departamento="Tecnologia")
+        )
+        await session.execute(
+            update(ProfessionalORM).where(ProfessionalORM.status == "licencia").values(status=ProfessionalStatus.INATIVO)
         )
 
         entries = build_seed_data(today)

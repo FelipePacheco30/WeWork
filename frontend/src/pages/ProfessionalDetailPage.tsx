@@ -16,7 +16,7 @@ export function ProfessionalDetailPage() {
       </div>
 
       {detailQuery.isLoading ? <p className="text-sm text-slate-400">Carregando detalhes...</p> : null}
-      {detailQuery.isError ? <p className="text-sm text-red-400">Nao foi possivel carregar o profissional.</p> : null}
+      {detailQuery.isError ? <p className="text-sm text-red-400">Não foi possível carregar o profissional.</p> : null}
 
       {detailQuery.data ? (
         <div className="mx-auto w-full max-w-4xl">

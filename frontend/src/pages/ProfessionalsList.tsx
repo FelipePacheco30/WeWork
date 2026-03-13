@@ -63,7 +63,7 @@ export function ProfessionalsListPage() {
               com agilidade
             </h1>
             <p className="mt-4 max-w-2xl text-base text-slate-300 md:text-lg">
-              Uma experiencia unificada para criar registros, filtrar talentos, editar dados e exportar informacoes com um fluxo claro.
+              Uma experiência unificada para criar registros, filtrar talentos, editar dados e exportar informações com um fluxo claro.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button className="bg-brand-900 px-7 py-3 text-base" onClick={() => smoothScrollTo("cadastro")}>
@@ -81,11 +81,11 @@ export function ProfessionalsListPage() {
             </div>
             <div className="border border-white/10 bg-slate-900/70 p-4">
               <p className="text-2xl font-bold text-white">{items.length}</p>
-              <p className="text-xs text-slate-400">Na pagina atual</p>
+              <p className="text-xs text-slate-400">Na página atual</p>
             </div>
             <div className="border border-white/10 bg-slate-900/70 p-4">
               <p className="text-2xl font-bold text-white">{totalPages}</p>
-              <p className="text-xs text-slate-400">Paginas totais</p>
+              <p className="text-xs text-slate-400">Páginas totais</p>
             </div>
           </div>
         </div>
@@ -93,7 +93,7 @@ export function ProfessionalsListPage() {
 
       <section id="cadastro" className="border-x border-b border-white/10 bg-gradient-to-b from-slate-900 to-slate-950 px-6 py-12 md:px-12">
         <div className="mx-auto max-w-7xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-brand-300">Criacao de registro</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-brand-300">Criação de registro</p>
           <div className="mt-2 flex flex-wrap items-center justify-between gap-4">
             <h2 className="text-3xl font-bold text-white">Cadastro de profissional</h2>
             <Button variant="secondary" onClick={() => smoothScrollTo("listagem")}>
@@ -158,7 +158,7 @@ export function ProfessionalsListPage() {
 
           <div className="flex flex-wrap items-center justify-between gap-2 border border-white/10 bg-slate-900/50 p-3">
             <p className="text-sm text-slate-300">
-              Mostrando pagina {page} de {totalPages} ({total} registros)
+              Mostrando página {page} de {totalPages} ({total} registros)
             </p>
             <div className="flex gap-3">
               <Button
@@ -173,7 +173,7 @@ export function ProfessionalsListPage() {
                 disabled={page >= totalPages}
                 onClick={() => setFilters((prev) => ({ ...prev, page: (prev.page ?? 1) + 1 }))}
               >
-                Proxima
+                Próxima
               </Button>
             </div>
           </div>
@@ -189,7 +189,9 @@ export function ProfessionalsListPage() {
           </div>
 
           {selectedQuery.isLoading ? <p className="mt-4 text-sm text-slate-400">Carregando detalhes...</p> : null}
-          {selectedQuery.isError ? <p className="mt-4 text-sm text-red-400">Nao foi possivel carregar o profissional selecionado.</p> : null}
+          {selectedQuery.isError ? (
+            <p className="mt-4 text-sm text-red-400">Não foi possível carregar o profissional selecionado.</p>
+          ) : null}
           {selectedProfessional ? (
             <div className="mt-5">
               <ProfessionalDetail professional={selectedProfessional} />

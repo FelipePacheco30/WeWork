@@ -7,7 +7,6 @@ from uuid import UUID
 class ProfessionalStatus(StrEnum):
     ATIVO = "ativo"
     INATIVO = "inativo"
-    LICENCIA = "licencia"
 
 
 @dataclass(slots=True)

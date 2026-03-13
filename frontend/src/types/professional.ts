@@ -1,4 +1,4 @@
-export type ProfessionalStatus = "ativo" | "inativo" | "licencia";
+export type ProfessionalStatus = "ativo" | "inativo";
 
 export interface Professional {
   id: string;

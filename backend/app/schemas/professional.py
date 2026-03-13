@@ -27,6 +27,8 @@ class ProfessionalBase(BaseModel):
     def validate_dates(self) -> "ProfessionalBase":
         if self.data_vencimento_contrato < self.data_inicio:
             raise ValueError("data_vencimento_contrato deve ser maior ou igual a data_inicio")
+        if self.data_vencimento_contrato < date.today():
+            raise ValueError("data_vencimento_contrato não pode ser uma data passada")
         return self
 
 

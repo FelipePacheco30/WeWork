@@ -74,7 +74,7 @@ export function ProfessionalsListTable({
     },
     {
       key: "acoes",
-      header: "Acoes",
+      header: "Ações",
       render: (item) => (
         <div className="flex flex-wrap gap-2">
           <div className="relative">
@@ -88,7 +88,7 @@ export function ProfessionalsListTable({
                 })
               }
             >
-              Opcoes
+              Opções
             </Button>
             {openOptionsFor === item.id ? (
               <div className="absolute right-0 z-20 mt-1 flex min-w-[140px] flex-col border border-white/10 bg-slate-900/95 p-1">
@@ -161,7 +161,7 @@ export function ProfessionalsListTable({
                   className="px-3 py-2 text-left text-sm text-brand-300 transition hover:bg-brand-500/10 hover:text-brand-200"
                   onClick={() => setOpenAboutFor(null)}
                 >
-                  Pagina
+                Página
                 </Link>
               </div>
             ) : null}

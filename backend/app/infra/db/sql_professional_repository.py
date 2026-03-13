@@ -19,6 +19,9 @@ class SQLProfessionalRepository(ProfessionalRepository):
 
     @staticmethod
     def _to_domain(model: ProfessionalORM) -> Professional:
+        status = model.status
+        if model.data_vencimento_contrato < date.today():
+            status = ProfessionalStatus.INATIVO
         return Professional(
             id=model.id,
             nome=model.nome,
@@ -28,7 +31,7 @@ class SQLProfessionalRepository(ProfessionalRepository):
             telefone=model.telefone,
             data_inicio=model.data_inicio,
             data_vencimento_contrato=model.data_vencimento_contrato,
-            status=model.status,
+            status=status,
             observacoes=model.observacoes,
             created_at=model.created_at,
             updated_at=model.updated_at,
